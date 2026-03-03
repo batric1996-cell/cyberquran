@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#000000" />
+<title>CyberQuran - نظام التسميع</title>
+
+<link rel="manifest" href="manifest.json">
+
+<link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+<div id="screen-home" class="screen active">
+<div class="home-container">
+<div class="logo-wrapper">
+<svg class="mushaf-icon" viewBox="0 0 120 140" xmlns="http://www.w3.org/2000/svg">
+<rect x="10" y="5" width="100" height="130" rx="6" fill="none" stroke="#00ffff" stroke-width="1.5" />
+<line x1="10" y1="5" x2="10" y2="135" stroke="#00ffff" stroke-width="3" />
+<text x="60" y="20" text-anchor="middle" font-size="10" fill="#00ffff">✦</text>
+</svg>
+<div class="app-title">
+<span class="title-main">تحفيظ القرآن</span>
+<span class="title-sub">CYBER · HIFZ · SYSTEM</span>
+</div>
+</div>
+<div class="home-btn-wrapper">
+<button id="btn-open-surahs-home" class="home-cta-btn" onclick="openSurahList()">
+<span class="btn-text">إختيار السورة</span>
+</button>
+</div>
+</div>
+</div>
+
+<div id="screen-recite" class="screen">
+<div id="recite-header">
+<span id="surah-name-display">---</span>
+<div id="status-indicator">
+<span id="status-dot" class="dot-idle"></span>
+<span id="status-text">جاهز</span>
+</div>
+</div>
+
+<div id="quran-text-area">
+<div id="quran-text-content" class="quran-text"></div>
+</div>
+
+<div id="speech-feedback-bar">
+<span id="speech-interim">···</span>
+</div>
+
+<nav id="bottom-nav">
+<button id="btn-recite" class="nav-btn btn-recite-default" onclick="toggleRecognition()">
+<span class="nav-label">تسميع</span>
+</button>
+<button id="btn-surahs" class="nav-btn btn-surahs" onclick="openSurahList()">
+<span class="nav-label">السور</span>
+</button>
+<button id="btn-delete" class="nav-btn btn-delete">
+<span class="nav-label">حذف</span>
+</button>
+<button id="btn-reveal" class="nav-btn btn-reveal" onclick="revealNextWord()">
+<span class="nav-label">كشف</span>
+</button>
+</nav>
+</div>
+
+<div id="surah-list-modal" class="modal-overlay">
+<div class="modal-box">
+<div class="modal-header">
+<span class="modal-title">◈ قائمة السور ◈</span>
+<button class="close-modal-btn" onclick="closeSurahList()">✕</button>
+</div>
+<div id="surah-list-container"></div>
+</div>
+</div>
+
+<div id="toast-msg" class="toast hidden"></div>
+
+<script src="js/modules/surahs.js"></script>
+<script src="js/app.js"></script>
+
+<script>
+if ('serviceWorker' in navigator) {
+window.addEventListener('load', () => {
+navigator.serviceWorker.register('./sw.js')
+.then(reg => console.log('✅ CyberQuran: نظام الأوفلاين مفعل'))
+.catch(err => console.error('❌ خطأ في تفعيل الأوفلاين:', err));
+});
+}
+</script>
+
+</body>
+</html>

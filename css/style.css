@@ -1,0 +1,674 @@
+/* تحسينات شاملة للخط والأداء */
+@font-face {
+  font-family: 'AL-Mohanad';
+  src: url('../fonts/AL-Mohanad-Extra-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap; /* تحسين أداء تحميل الخط */
+}
+
+:root {
+  --bg-primary: #000000;
+  --color-white: #ffffff;
+  --color-cyan: #00ffff;
+  --color-yellow: #fff000;
+  --color-red: #ff0000;
+  --color-dim: #404040;
+  /* تحسين التباين */
+  --color-dim-light: #555555;
+  --transition-speed: 0.3s;
+  --spacing-unit: clamp(4px, 2vw, 8px);
+}
+
+/* تأسيس قاعدة HTML */
+html {
+  height: 100%;
+  font-size: 16px;
+  /* قاعدة ثابتة للـ rem */
+  -webkit-text-size-adjust: 100%;
+  /* منع تكبير النص التلقائي في iOS */
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--color-white);
+  font-family: 'AL-Mohanad', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  direction: rtl;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.screen {
+  position: fixed;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  background: #000;
+}
+
+.screen.active {
+  display: flex;
+}
+
+/* شاشة البداية - محسنة */
+.home-container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(20px, 8vh, 40px);
+  padding: 20px;
+}
+
+.title-main {
+  display: block;
+  font-size: clamp(1.5rem, 8vw, 2.5rem);
+  color: #fff;
+  text-shadow: 0 0 10px var(--color-cyan);
+  text-align: center;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.title-sub {
+  font-size: clamp(0.5rem, 3vw, 0.8rem);
+  color: var(--color-cyan);
+  letter-spacing: 3px;
+  opacity: 0.8;
+  text-align: center;
+}
+
+.home-cta-btn {
+  padding: clamp(12px, 3vh, 18px) clamp(30px, 8vw, 50px);
+  background: transparent;
+  border: 2px solid var(--color-cyan);
+  color: var(--color-cyan);
+  font-family: inherit;
+  border-radius: 8px;
+  font-size: clamp(1rem, 5vw, 1.3rem);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  min-width: 200px;
+  max-width: 90%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.home-cta-btn:hover,
+.home-cta-btn:focus {
+  background: rgba(0, 255, 255, 0.1);
+  transform: scale(1.05);
+}
+
+.home-cta-btn:active {
+  transform: scale(0.98);
+}
+
+/* التسميع - محسن */
+#recite-header {
+  height: clamp(45px, 8vh, 60px);
+  border-bottom: 1px solid var(--color-dim-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(10px, 4vw, 20px);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 10;
+}
+
+#surah-name-display {
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
+  font-weight: 600;
+}
+
+#status-text {
+  font-size: clamp(0.7rem, 3vw, 0.85rem);
+  opacity: 0.9;
+}
+
+#quran-text-area {
+  flex: 1;
+  overflow-y: auto;
+  padding: clamp(12px, 4vh, 20px);
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-cyan) var(--color-dim);
+}
+
+/* تخصيص شريط التمرير */
+#quran-text-area::-webkit-scrollbar {
+  width: 6px;
+}
+
+#quran-text-area::-webkit-scrollbar-track {
+  background: var(--color-dim);
+}
+
+#quran-text-area::-webkit-scrollbar-thumb {
+  background: var(--color-cyan);
+  border-radius: 3px;
+}
+
+/* نص القرآن المسترسل - محسن */
+.quran-text {
+  /* التحكم بحجم الخط - متجاوب مع جميع الشاشات */
+  font-size: clamp(1.4rem, 6vw, 3rem);
+  line-height: 1.8;
+
+  /* المحاذاة والاتجاه */
+  text-align: justify;
+  direction: rtl;
+
+  /* ضبط المسافات بين الكلمات بشكل ديناميكي */
+  word-spacing: -0.5px;
+  letter-spacing: 0.3px;
+
+  /* تحسين تدفق النص */
+  display: block;
+  width: 100%;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  word-break: break-word;
+
+  /* منع الفراغات الكبيرة */
+  hyphenate-limit-chars: 6 3 3;
+  hyphens: auto;
+
+  /* ضبط الهوامش الداخلية */
+  padding: 0 2px;
+  box-sizing: border-box;
+
+  /* تحسين جودة الخط */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* معالجة احترافية لأرقام الآيات */
+.ayah-number {
+  display: inline-block;
+  white-space: nowrap;
+  font-size: 0.8em;
+  color: #00ff00 !important;
+  background: transparent !important;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin: 0 2px;
+
+  /* منع كسر الرقم والأقواس */
+  unicode-bidi: isolate;
+  -webkit-user-select: none;
+  user-select: none;
+
+  /* تحسين الظهور */
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+/* ضبط الكلمات المخفية والمكشوفة */
+.word-hidden,
+.word-revealed-voice,
+.word-revealed-hint {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* منع الفراغات الطويلة في النص المضبوط */
+.quran-text::after {
+  content: "";
+  display: inline-block;
+  width: 100%;
+}
+
+/* تحسين عرض السطر الواحد */
+.quran-text span {
+  display: inline;
+}
+
+/* ضبط تباعد الأسطر مع الأرقام */
+.quran-text .ayah-number + *,
+.quran-text * + .ayah-number {
+  margin-right: 2px;
+}
+
+/* تحسينات إضافية للشاشات الصغيرة */
+@media (max-width: 480px) {
+  .quran-text {
+    font-size: clamp(1.1rem, 5vw, 2.2rem);
+    word-spacing: -0.3px;
+    letter-spacing: 0.2px;
+  }
+
+  .ayah-number {
+    font-size: 0.75em;
+    padding: 1px 4px;
+  }
+}
+
+/* تحسينات للشاشات الكبيرة */
+@media (min-width: 1200px) {
+  .quran-text {
+    font-size: clamp(1.5rem, 5vw, 3.5rem);
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+}
+
+/* دعم خاصية الضبط المتقدم للمتصفحات الحديثة */
+@supports (text-justify: inter-word) {
+  .quran-text {
+    text-justify: inter-word;
+  }
+}
+
+@supports (hyphenate-character: auto) {
+  .quran-text {
+    hyphenate-character: auto;
+  }
+}
+
+/* ضمان عدم وجود فراغات جانبية في الحاوية الأم */
+#quran-text-area {
+  padding: 15px 5px;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* تحسين المسافة بين السطور عند التكبير */
+@media (min-width: 768px) {
+  .quran-text {
+    line-height: 2;
+  }
+}
+
+/* دعم الوضع الأفقي */
+@media (orientation: landscape) and (max-height: 600px) {
+  .quran-text {
+    font-size: clamp(1.3rem, 5vw, 2.5rem);
+    line-height: 1.7;
+  }
+}
+
+/* الكلمات وحالاتها - محسنة */
+.word-hidden {
+  color: transparent;
+  user-select: none;
+  background: transparent !important;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  transition: background var(--transition-speed) ease;
+}
+
+.word-revealed-voice {
+  color: var(--color-white);
+  transition: color var(--transition-speed) ease;
+}
+
+.word-revealed-hint {
+  color: #80ffff;
+  /* لون سيان أفتح وأكثر وضوحاً */
+  transition: color var(--transition-speed) ease;
+  text-shadow: 0 0 5px rgba(0, 255, 255, 0.3);
+}
+
+/* رقم الآية - محسن */
+.ayah-number {
+  color: #80ffff;
+  font-size: clamp(0.8rem, 4vw, 1rem);
+  margin: 0 4px;
+  display: inline;
+  white-space: nowrap;
+  background: rgba(0, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#speech-feedback-bar {
+  min-height: 32px;
+  height: auto;
+  background: #0a0a0a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  font-size: clamp(0.7rem, 3vw, 0.85rem);
+  color: var(--color-yellow);
+  text-align: center;
+  border-top: 1px solid var(--color-dim-light);
+}
+
+/* الأزرار السفلية - محسنة */
+#bottom-nav {
+  min-height: 75px;
+  height: auto;
+  border-top: 1px solid var(--color-dim-light);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 8px clamp(4px, 2vw, 12px);
+  gap: clamp(4px, 2vw, 8px);
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.nav-btn {
+  flex: 1;
+  min-height: 44px;
+  /* تحسين منطقة اللمس */
+  height: clamp(44px, 8vh, 55px);
+  margin: 0 2px;
+  background: transparent;
+  border: 2px solid #fff;
+  color: #fff;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: clamp(0.8rem, 3.5vw, 1rem);
+  cursor: pointer;
+  transition: all var(--transition-speed) ease;
+  padding: 0 8px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-weight: 600;
+}
+
+.nav-btn:hover,
+.nav-btn:focus {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.nav-btn:active {
+  transform: translateY(0);
+}
+
+.btn-recite-active {
+  border-color: var(--color-yellow);
+  color: var(--color-yellow);
+  box-shadow: 0 0 15px rgba(255, 240, 0, 0.3);
+}
+
+.btn-delete {
+  border-color: var(--color-red);
+  color: var(--color-red);
+}
+
+.btn-delete:hover,
+.btn-delete:focus {
+  background: rgba(255, 0, 0, 0.1);
+}
+
+.btn-reveal {
+  border-color: var(--color-cyan);
+  color: var(--color-cyan);
+}
+
+.btn-reveal:hover,
+.btn-reveal:focus {
+  background: rgba(0, 255, 255, 0.1);
+}
+
+/* Modal السور - محسن */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 16px;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal-box {
+  width: min(95%, 500px);
+  max-height: min(85vh, 800px);
+  background: #0f0f0f;
+  border: 1px solid var(--color-dim-light);
+  border-radius: 16px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  animation: modalSlideIn 0.3s ease;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  padding: clamp(12px, 4vh, 16px);
+  border-bottom: 1px solid var(--color-dim-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(0.9rem, 4vw, 1.1rem);
+  background: #151515;
+}
+
+.close-modal-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0 8px;
+  line-height: 1;
+  transition: color var(--transition-speed) ease;
+}
+
+.close-modal-btn:hover,
+.close-modal-btn:focus {
+  color: var(--color-red);
+}
+
+#surah-list-container {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.surah-item {
+  padding: clamp(12px, 3vh, 18px) clamp(15px, 4vw, 20px);
+  border-bottom: 1px solid #222;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: clamp(0.95rem, 4vw, 1.1rem);
+  color: #fff;
+  cursor: pointer;
+  transition: background var(--transition-speed) ease;
+  min-height: 60px;
+}
+
+.surah-item:hover,
+.surah-item:focus {
+  background: #1a1a1a;
+}
+
+.surah-item:active {
+  background: #252525;
+}
+
+.surah-name {
+  font-weight: 600;
+}
+
+.surah-info {
+  color: var(--color-cyan);
+  font-size: 0.9em;
+  opacity: 0.8;
+}
+
+/* Toast - محسن */
+.toast {
+  position: fixed;
+  bottom: max(90px, 12vh);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(34, 34, 34, 0.95);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 10px 24px;
+  border-radius: 30px;
+  font-size: clamp(0.8rem, 3.5vw, 0.95rem);
+  color: #fff;
+  z-index: 1000;
+  white-space: nowrap;
+  max-width: 90%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: 1px solid var(--color-dim-light);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  animation: toastFadeIn 0.3s ease;
+}
+
+@keyframes toastFadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
+/* كلاسات مساعدة */
+.hidden {
+  display: none !important;
+}
+
+.dot-listening {
+  width: clamp(6px, 2vw, 8px);
+  height: clamp(6px, 2vw, 8px);
+  background: var(--color-yellow);
+  border-radius: 50%;
+  animation: blink 1s infinite;
+  display: inline-block;
+  margin-left: 6px;
+}
+
+@keyframes blink {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+/* تحسينات للأجهزة اللوحية */
+@media (min-width: 768px) {
+  .quran-text {
+    font-size: 1.8rem;
+    line-height: 2;
+  }
+
+  .nav-btn {
+    font-size: 1.1rem;
+  }
+
+  #surah-name-display {
+    font-size: 1.2rem;
+  }
+}
+
+/* تحسينات للشاشات الكبيرة */
+@media (min-width: 1200px) {
+  .modal-box {
+    width: 600px;
+  }
+
+  .quran-text {
+    font-size: 2rem;
+  }
+}
+
+/* دعم الوضع الأفقي على الجوال */
+@media (orientation: landscape) and (max-height: 500px) {
+  #recite-header {
+    height: 40px;
+  }
+
+  #bottom-nav {
+    min-height: 60px;
+  }
+
+  .nav-btn {
+    height: 40px;
+    min-height: 40px;
+  }
+
+  .quran-text {
+    font-size: 1.2rem;
+    line-height: 1.5;
+  }
+}
+
+/* تحسينات للأجهزة ذات الكثافة العالية */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .nav-btn,
+  .home-cta-btn,
+  .surah-item {
+    border-width: 1px;
+  }
+}
+
+/* دعم الوضع الداكن للنظام */
+@media (prefers-color-scheme: dark) {
+:root {
+  --bg-primary: #000000;
+}
+}
+
+/* تحسين إمكانية الوصول */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+.nav-btn:focus-visible,
+.home-cta-btn:focus-visible,
+.surah-item:focus-visible,
+.close-modal-btn:focus-visible {
+  outline: 3px solid var(--color-cyan);
+  outline-offset: 2px;
+}
